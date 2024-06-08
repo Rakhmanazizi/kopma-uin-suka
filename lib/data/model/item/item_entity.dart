@@ -8,6 +8,11 @@ class ItemEntity extends Equatable {
   final String description;
   final int quantity;
   final int price;
+  final String? sellerId;
+  final String? sellerName;
+  final String? sellerEmail;
+  final String? sellerAddress;
+  final String? sellerImage;
 
   const ItemEntity({
     required this.id,
@@ -17,6 +22,11 @@ class ItemEntity extends Equatable {
     required this.description,
     required this.quantity,
     required this.price,
+    this.sellerId,
+    this.sellerName,
+    this.sellerEmail,
+    this.sellerAddress,
+    this.sellerImage,
   });
 
   Map<String, Object?> toDocument() {
@@ -28,6 +38,11 @@ class ItemEntity extends Equatable {
       'description': description,
       'quantity': quantity,
       'price': price,
+      'sellerId': sellerId,
+      'sellerName': sellerName,
+      'sellerEmail': sellerEmail,
+      'sellerAddress': sellerAddress,
+      'sellerImage': sellerImage,
     };
   }
 
@@ -40,12 +55,29 @@ class ItemEntity extends Equatable {
       description: doc['description'] as String,
       quantity: doc['quantity'],
       price: doc['price'],
+      sellerId: doc['sellerId'] as String,
+      sellerName: doc['sellerName'] as String,
+      sellerEmail: doc['sellerEmail'] as String,
+      sellerAddress: doc['sellerAddress'] as String,
+      sellerImage: doc['sellerImage'] as String?,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [id, name, image, category, description, quantity, price];
+  List<Object?> get props => [
+        id,
+        name,
+        image,
+        category,
+        description,
+        quantity,
+        price,
+        sellerId,
+        sellerName,
+        sellerEmail,
+        sellerAddress,
+        sellerImage
+      ];
 
   @override
   String toString() {
@@ -56,7 +88,12 @@ class ItemEntity extends Equatable {
      category: $category 
      description: $description 
      quantity: $quantity 
-     price: $price 
+     price: $price
+     sellerId: $sellerId
+     sellerName: $sellerName
+     sellerEmail: $sellerEmail
+     sellerAddress: $sellerAddress
+     sellerImage: $sellerImage
    }''';
   }
 }

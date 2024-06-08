@@ -2,17 +2,22 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kopma/bloc/detail_item_bloc/detail_item_bloc.dart';
 import 'package:kopma/bloc/item_bloc/item_bloc.dart';
 import 'package:kopma/bloc/user_bloc/user_bloc.dart';
+import 'package:kopma/data/datasource/local/local_database.dart';
 import 'package:kopma/data/datasource/network/firebase_user_datasource.dart';
 import 'package:kopma/data/item_repository.dart';
 import 'package:kopma/data/model/user/user_model.dart';
 import 'package:kopma/di/service_locator.dart';
 import 'package:kopma/simple_bloc_observer.dart';
 import 'package:kopma/ui/main_page.dart';
+import 'data/datasource/local/local_cart_datasource.dart';
 import 'data/datasource/network/firebase_item_datasource.dart';
+import 'data/item_repository_impl.dart';
 import 'data/user_repository.dart';
 import 'firebase_options.dart';
 
@@ -22,7 +27,9 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Bloc.observer = SimpleBlocObserver();
   await setupServiceLocator();
-  runApp(MyApp(FirebaseUserDataSource(), FirebaseItemDataSource()));
+  await serviceLocator<LocalDatabase>().initialize();
+  runApp(MyApp(FirebaseUserDataSource(),
+      ItemRepositoryImpl(FirebaseItemDataSource(), LocalCartDataSource())));
 }
 
 class MyApp extends StatelessWidget {
@@ -40,6 +47,8 @@ class MyApp extends StatelessWidget {
               create: (_) => UserBloc(userRepository: userRepository)),
           RepositoryProvider<ItemBloc>(
               create: (_) => ItemBloc(itemRepository: itemRepository)),
+          RepositoryProvider<DetailItemBloc>(
+              create: (_) => DetailItemBloc(itemRepository: itemRepository)),
         ],
         child: BlocBuilder<UserBloc, UserState>(
           builder: (BuildContext context, UserState state) {
@@ -53,6 +62,10 @@ class MyApp extends StatelessWidget {
                     create: (context) => ItemBloc(
                         itemRepository:
                             context.read<ItemBloc>().itemRepository)),
+                BlocProvider(
+                    create: (context) => DetailItemBloc(
+                        itemRepository:
+                            context.read<DetailItemBloc>().itemRepository)),
               ],
               child: MainApp(userRepository: userRepository),
             );
@@ -94,6 +107,11 @@ class _MainApp extends State<MainApp> {
           ),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
           useMaterial3: true),
+      localizationsDelegates: const [
+        DefaultMaterialLocalizations.delegate,
+        DefaultWidgetsLocalizations.delegate,
+        DefaultCupertinoLocalizations.delegate, // This is required
+      ],
       initialRoute:
           FirebaseAuth.instance.currentUser == null ? '/sign-in' : '/home',
       routes: {

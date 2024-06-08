@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kopma/data/model/item/item_model.dart';
-import 'package:kopma/data/model/transaction_model.dart';
+import 'package:kopma/data/model/transaction/transaction_model.dart';
 import 'package:kopma/data/model/user/user_model.dart';
 
 abstract class ItemRepository {
   Query<ItemModel> getListItem(String? query);
 
-  Query<ItemModel> getDetailItem(String? query);
+  Future<ItemModel> getDetailItem(String id);
 
   Future<String> uploadImage(File file, String fileName);
 
@@ -16,5 +16,13 @@ abstract class ItemRepository {
 
   Future<bool> deleteItem(String itemId);
 
-  Future<TransactionModel> buyItem(ItemModel item, UserModel user);
+  Future<bool> buyItem(String itemId, int quantity);
+
+  Future<bool> addItemToCart(ItemModel item);
+
+  Future<bool> deleteItemFromCart(String itemId);
+
+  Future<List<ItemModel>> getListItemFromCart();
+
+  Future<bool> buyItemFromCart(String itemId, int quantity);
 }

@@ -10,6 +10,7 @@ import 'package:kopma/ui/home_page.dart';
 import 'package:kopma/ui/profile_page.dart';
 
 import '../bloc/user_bloc/user_bloc.dart';
+import 'cart_page.dart';
 
 class MainPage extends StatefulWidget {
   final UserRepository userRepository;
@@ -38,13 +39,29 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> widgetOptions = <Widget> [
+    final List<Widget> widgetOptions = <Widget>[
       const HomePage(),
       const HistoryPage(),
-      ProfilePage(userRepository: widget.userRepository,)
+      ProfilePage(
+        userRepository: widget.userRepository,
+      )
     ];
     return Scaffold(
-      appBar: kIsWeb ? null : AppBar(title: const Text('Kopma')),
+      appBar: AppBar(
+        title: const Text("Kopma"),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.shopping_cart,
+            ),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const CartPage();
+              }));
+            },
+          )
+        ],
+      ),
       body: widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 34,
