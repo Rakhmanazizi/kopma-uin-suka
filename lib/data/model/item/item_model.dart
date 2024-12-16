@@ -9,6 +9,11 @@ class ItemModel extends Equatable {
   final String description;
   final int quantity;
   final int price;
+  final String? sellerId;
+  final String? sellerName;
+  final String? sellerEmail;
+  final String? sellerAddress;
+  final String? sellerImage;
 
   const ItemModel({
     this.id,
@@ -18,6 +23,11 @@ class ItemModel extends Equatable {
     required this.description,
     required this.quantity,
     required this.price,
+    this.sellerId,
+    this.sellerName,
+    this.sellerEmail,
+    this.sellerAddress,
+    this.sellerImage,
   });
 
   // empty static item.
@@ -28,7 +38,12 @@ class ItemModel extends Equatable {
       category: '',
       description: '',
       quantity: 0,
-      price: 0);
+      price: 0,
+      sellerId: '',
+      sellerName: '',
+      sellerEmail: '',
+      sellerAddress: '',
+      sellerImage: '');
 
 //   modify item parameters
   ItemModel copyWith({
@@ -39,6 +54,11 @@ class ItemModel extends Equatable {
     String? description,
     int? quantity,
     int? price,
+    String? sellerId,
+    String? sellerName,
+    String? sellerEmail,
+    String? sellerAddress,
+    String? sellerImage,
   }) {
     return ItemModel(
       id: id ?? this.id,
@@ -48,14 +68,22 @@ class ItemModel extends Equatable {
       description: description ?? this.description,
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
+      sellerId: sellerId ?? this.sellerId,
+      sellerName: sellerName ?? this.sellerName,
+      sellerEmail: sellerEmail ?? this.sellerEmail,
+      sellerAddress: sellerAddress ?? this.sellerAddress,
+      sellerImage: sellerImage ?? this.sellerImage,
     );
   }
 
+  // convenience getter to determine whether the current user is empty
   bool get isEmpty => this == ItemModel.empty;
 
+  // convenience getter to determine whether the current user is not empty
   bool get isNotEmpty => this != ItemModel.empty;
 
-  ItemEntity toEntity(String id) {
+  ItemEntity toEntity(String id, String sellerId, String sellerName,
+      String sellerEmail, String sellerAddress, String? sellerImage) {
     return ItemEntity(
       id: id,
       name: name,
@@ -64,6 +92,11 @@ class ItemModel extends Equatable {
       description: description,
       quantity: quantity,
       price: price,
+      sellerId: sellerId,
+      sellerName: sellerName,
+      sellerEmail: sellerEmail,
+      sellerAddress: sellerAddress,
+      sellerImage: sellerImage,
     );
   }
 
@@ -76,11 +109,28 @@ class ItemModel extends Equatable {
       description: entity.description,
       quantity: entity.quantity,
       price: entity.price,
+      sellerId: entity.sellerId,
+      sellerName: entity.sellerName,
+      sellerEmail: entity.sellerEmail,
+      sellerAddress: entity.sellerAddress,
+      sellerImage: entity.sellerImage,
     );
   }
 
   @override
   // TODO: implement props
-  List<Object?> get props =>
-      [id, name, image, category, description, quantity, price];
+  List<Object?> get props => [
+        id,
+        name,
+        image,
+        category,
+        description,
+        quantity,
+        price,
+        sellerId,
+        sellerName,
+        sellerEmail,
+        sellerAddress,
+        sellerImage
+      ];
 }

@@ -10,8 +10,9 @@ import 'package:kopma/bloc/item_bloc/item_bloc.dart';
 import 'package:kopma/bloc/user_bloc/user_bloc.dart';
 import 'package:kopma/ui/post_item_page.dart';
 
+import '../data/model/item/item_entity.dart';
 import '../data/model/item/item_model.dart';
-import 'detail_page.dart';
+import 'detail_item_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
